@@ -13,6 +13,12 @@ import { LEADERS } from "../shared/leaders";
 import Login from "./Login";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { addComment } from "../redux/ActionCreators";
+
+const mapDispatchToProps = (dispatch) => ({
+  addComment: (dishId, rating, author, comment) =>
+    dispatch(addComment(dishId, rating, author, comment)),
+});
 
 const mapStateToProps = (state) => {
   return {
@@ -46,18 +52,19 @@ class Main extends Component {
       );
     };
 
-    const DishWithId = () => {
+    const DishWithId = (match) => {
       const { dishId } = useParams();
       return (
         <DishDetail
           dish={
-            this.state.dishes.filter(
-              (dish) => dish.id === parseInt(dishId, 10)
+            this.props.dishes.filter(
+              (dish) => dish.id === parseInt(match.params.dishId, 10)
             )[0]
           }
-          comments={this.state.comments.filter(
-            (comment) => comment.dishId === parseInt(dishId, 10)
+          comments={this.props.comments.filter(
+            (comment) => comment.dishId === parseInt(match.params.dishId, 10)
           )}
+          addComment={this.props.addComment}
         />
       );
     };
@@ -88,4 +95,4 @@ class Main extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Main);
+export default (connect(mapStateToProps, mapDispatchToProps)(Main));
