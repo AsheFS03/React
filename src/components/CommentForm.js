@@ -39,6 +39,7 @@ class CommentForm extends Component {
       values.author,
       values.comment
     );
+    this.props.resetFeedbackForm();
   }
 
   render() {
